@@ -3,9 +3,11 @@
 import com.todo.FPOS_project.enums.PropertyState;
 import com.todo.FPOS_project.enums.PropertyType;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 
+@Document("Properties")
 public class Property {
     @Id
     private String id;
