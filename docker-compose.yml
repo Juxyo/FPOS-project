@@ -20,6 +20,7 @@
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongo-fpos-container:27017/fpos
       JWT_SECRET_KEY: j7Giyh4FSAYNCUf4Ac0ZX2zCGcwSoD+PDE3kWMoBRf8=
+      JWT_EXPIRATION_TIME: 864000000
       SUS_EMAIL_USERNAME: notifications.sus@gmail.com
       SUS_EMAIL_PASSWORD: kczq uvsc kujn nnnr
       FPOS_BACK_PORT: 3000
