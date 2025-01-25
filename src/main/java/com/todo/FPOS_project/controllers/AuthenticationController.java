@@ -43,6 +43,7 @@ public class AuthenticationController {
         if (investorRegisterDTO.getEmailAdress() == null || investorRegisterDTO.getNationalId() == null) return ResponseEntity.badRequest().body(Map.of("message", "Email and national ID are required"));
         
         User user = userRepository.findByEmailAdress(investorRegisterDTO.getEmailAdress());
+        System.out.println(user.getNationalId());
         if (user != null) ResponseEntity.ok(Map.of("message", "User already exists"));
         
         authenticationService.register(investorRegisterDTO);
@@ -54,6 +55,7 @@ public class AuthenticationController {
         if (agentRegisterDTO.getEmailAdress() == null || agentRegisterDTO.getNationalId() == null) return ResponseEntity.badRequest().body(Map.of("message", "Email and national ID are required"));
 
         User user = userRepository.findByEmailAdress(agentRegisterDTO.getEmailAdress());
+        System.out.println(user.getNationalId());
         if (user != null) ResponseEntity.ok(Map.of("message", "User already exists"));
 
         authenticationService.register(agentRegisterDTO);
@@ -68,7 +70,7 @@ public class AuthenticationController {
             User user = userRepository.findByEmailAdress(loginUserDto.getEmailAdress());
             if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
             if (!user.isEnabled()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "User is disabled"));
-
+            
             User authenticatedUser = authenticationService.authenticate(loginUserDto);
 
             String jwtToken = jwtService.generateToken(authenticatedUser);
