@@ -44,7 +44,7 @@ public class AuthenticationController {
         
         User user = userRepository.findByEmailAdress(investorRegisterDTO.getEmailAdress());
         System.out.println(user.getNationalId());
-        if (user != null) ResponseEntity.ok(Map.of("message", "User already exists"));
+        if (user != null) ResponseEntity.badRequest().body(Map.of("message", "User already exists"));
         
         authenticationService.register(investorRegisterDTO);
         return ResponseEntity.ok(Map.of("message", "Registered successfully"));
@@ -56,7 +56,7 @@ public class AuthenticationController {
 
         User user = userRepository.findByEmailAdress(agentRegisterDTO.getEmailAdress());
         System.out.println(user.getNationalId());
-        if (user != null) ResponseEntity.ok(Map.of("message", "User already exists"));
+        if (user != null) ResponseEntity.badRequest().body(Map.of("message", "User already exists"));
 
         authenticationService.register(agentRegisterDTO);
         return ResponseEntity.ok(Map.of("message", "Registered successfully"));
