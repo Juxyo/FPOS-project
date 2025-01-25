@@ -9,7 +9,4 @@ public interface WalletRepository extends MongoRepository<Wallet, String> {
     
     @Query("{ 'investorId' : ?0 }")
     Wallet findByInvestorId(String investorId);
-    
-    @Query(value = "{ 'investorId' : ?0 }", fields = "{ 'balance' : 1 }")
-    double getBalanceByInvestorId(String investorId);
 }

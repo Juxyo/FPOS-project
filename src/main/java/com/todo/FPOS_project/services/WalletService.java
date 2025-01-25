@@ -27,7 +27,7 @@ public class WalletService {
     }
     
     public double getBalanceByInvestorId(String investorId) {
-        return walletRepository.getBalanceByInvestorId(investorId);
+        return walletRepository.findByInvestorId(investorId).getBalance();
     }
     
     public void addCurrency(String investorId, double amount) {
