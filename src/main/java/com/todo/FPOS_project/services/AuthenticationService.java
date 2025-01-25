@@ -22,6 +22,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
 
     private final UserRepository userRepository;
+    private final WalletService walletService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -31,12 +32,14 @@ public class AuthenticationService {
             UserRepository userRepository,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
-            JwtService jwtService
+            JwtService jwtService,
+            WalletService walletService
     ) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.walletService = walletService;
     }
 
     public void register(InvestorRegisterDTO input) {
@@ -60,6 +63,8 @@ public class AuthenticationService {
         user.setEmployerAddress(input.getEmployerAddress());
         user.setEmployerName(input.getEmployerName());
         user.setJobTitle(input.getJobTitle());
+        
+        walletService.createWallet(user.getNationalId());
         
         userRepository.save(user);
     }

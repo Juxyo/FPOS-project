@@ -10,6 +10,7 @@ import com.todo.FPOS_project.dtos.request.UserLoginDTO;
 import com.todo.FPOS_project.dtos.response.UserLoginResponseDTO;
 import com.todo.FPOS_project.services.AuthenticationService;
 import com.todo.FPOS_project.services.JwtService;
+import com.todo.FPOS_project.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,25 +27,26 @@ import java.util.Map;
 public class AuthenticationController {
     @Autowired
     private final JwtService jwtService;
-
     @Autowired
     private final AuthenticationService authenticationService;
     @Autowired
+    private final UserService userService;
+    
+    @Autowired
     private final UserRepository userRepository;
 
-    public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService, UserRepository userRepository) {
+    public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService, UserRepository userRepository, UserService userService) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @PostMapping("/investors/register")
     public ResponseEntity register(@RequestBody InvestorRegisterDTO investorRegisterDTO) {
         if (investorRegisterDTO.getEmailAdress() == null || investorRegisterDTO.getNationalId() == null) return ResponseEntity.badRequest().body(Map.of("message", "Email and national ID are required"));
         
-        User user = userRepository.findByEmailAdress(investorRegisterDTO.getEmailAdress());
-        System.out.println(user.getNationalId());
-        if (user != null) ResponseEntity.badRequest().body(Map.of("message", "User already exists"));
+        if (!userService.userEmailExists(investorRegisterDTO.getEmailAdress())) ResponseEntity.badRequest().body(Map.of("message", "User already exists"));
         
         authenticationService.register(investorRegisterDTO);
         return ResponseEntity.ok(Map.of("message", "Registered successfully"));
@@ -53,10 +55,8 @@ public class AuthenticationController {
     @PostMapping("/agents/register")
     public ResponseEntity register(@RequestBody AgentRegisterDTO agentRegisterDTO) {
         if (agentRegisterDTO.getEmailAdress() == null || agentRegisterDTO.getNationalId() == null) return ResponseEntity.badRequest().body(Map.of("message", "Email and national ID are required"));
-
-        User user = userRepository.findByEmailAdress(agentRegisterDTO.getEmailAdress());
-        System.out.println(user.getNationalId());
-        if (user != null) ResponseEntity.badRequest().body(Map.of("message", "User already exists"));
+        
+        if (!userService.userEmailExists(agentRegisterDTO.getEmailAdress())) ResponseEntity.badRequest().body(Map.of("message", "User already exists"));
 
         authenticationService.register(agentRegisterDTO);
         return ResponseEntity.ok(Map.of("message", "Registered successfully"));
@@ -67,9 +67,8 @@ public class AuthenticationController {
         try {
             if (loginUserDto.getEmailAdress() == null || loginUserDto.getPassword() == null) return ResponseEntity.badRequest().body("Email and password are required");
             
-            User user = userRepository.findByEmailAdress(loginUserDto.getEmailAdress());
-            if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
-            if (!user.isEnabled()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "User is disabled"));
+            if (!userService.userEmailExists(loginUserDto.getEmailAdress())) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
+            if (!userService.isUserEmailEnabled(loginUserDto.getEmailAdress())) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "User is disabled"));
             
             User authenticatedUser = authenticationService.authenticate(loginUserDto);
 
