@@ -1,4 +1,4 @@
-﻿package com.todo.FPOS_project.db.models;
+package com.todo.FPOS_project.db.models;
 
 import com.todo.FPOS_project.enums.TransactionType;
 import org.springframework.data.annotation.Id;

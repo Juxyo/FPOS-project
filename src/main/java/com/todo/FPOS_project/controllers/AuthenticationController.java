@@ -1,4 +1,4 @@
-﻿package com.todo.FPOS_project.controllers;
+package com.todo.FPOS_project.controllers;
 
 import com.todo.FPOS_project.db.models.User;
 import com.todo.FPOS_project.db.models.submodels.Agent;
@@ -10,7 +10,6 @@ import com.todo.FPOS_project.dtos.request.UserLoginDTO;
 import com.todo.FPOS_project.dtos.response.UserLoginResponseDTO;
 import com.todo.FPOS_project.services.AuthenticationService;
 import com.todo.FPOS_project.services.JwtService;
-import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/auth")
@@ -45,7 +42,7 @@ public class AuthenticationController {
     public ResponseEntity register(@RequestBody InvestorRegisterDTO investorRegisterDTO) {
         if (investorRegisterDTO.getEmailAdress() == null || investorRegisterDTO.getNationalId() == null) return ResponseEntity.badRequest().body(Map.of("message", "Email and national ID are required"));
         
-        Investor user = (Investor) userRepository.findByEmailAdress(investorRegisterDTO.getEmailAdress());
+        User user = userRepository.findByEmailAdress(investorRegisterDTO.getEmailAdress());
         if (user != null) ResponseEntity.ok(Map.of("message", "User already exists"));
         
         authenticationService.register(investorRegisterDTO);
@@ -56,7 +53,7 @@ public class AuthenticationController {
     public ResponseEntity register(@RequestBody AgentRegisterDTO agentRegisterDTO) {
         if (agentRegisterDTO.getEmailAdress() == null || agentRegisterDTO.getNationalId() == null) return ResponseEntity.badRequest().body(Map.of("message", "Email and national ID are required"));
 
-        Agent user = (Agent) userRepository.findByEmailAdress(agentRegisterDTO.getEmailAdress());
+        User user = userRepository.findByEmailAdress(agentRegisterDTO.getEmailAdress());
         if (user != null) ResponseEntity.ok(Map.of("message", "User already exists"));
 
         authenticationService.register(agentRegisterDTO);

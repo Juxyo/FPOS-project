@@ -1,4 +1,4 @@
-﻿package com.todo.FPOS_project.dtos.request;
+package com.todo.FPOS_project.dtos.request;
 
 import com.todo.FPOS_project.enums.Citizenship;
 
@@ -7,13 +7,12 @@ import java.time.LocalDate;
 public class AgentRegisterDTO {
 
     private String nationalId, lastname, firstname, emailAdress, hashedPassword, phoneNumber, address;
-    private boolean enabled;
     private LocalDate birthDate;
 
     public AgentRegisterDTO() {
     }
 
-    public AgentRegisterDTO(String nationalId, String lastname, String firstname, String emailAdress, String hashedPassword, String phoneNumber, String address, boolean enabled, LocalDate birthDate) {
+    public AgentRegisterDTO(String nationalId, String lastname, String firstname, String emailAdress, String hashedPassword, String phoneNumber, String address, LocalDate birthDate) {
         this.nationalId = nationalId;
         this.lastname = lastname;
         this.firstname = firstname;
@@ -21,7 +20,6 @@ public class AgentRegisterDTO {
         this.hashedPassword = hashedPassword;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        this.enabled = enabled;
         this.birthDate = birthDate;
     }
 
@@ -79,14 +77,6 @@ public class AgentRegisterDTO {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
     public LocalDate getBirthDate() {

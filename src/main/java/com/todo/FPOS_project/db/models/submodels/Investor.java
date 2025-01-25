@@ -1,4 +1,4 @@
-﻿package com.todo.FPOS_project.db.models.submodels;
+package com.todo.FPOS_project.db.models.submodels;
 
 import com.todo.FPOS_project.db.models.User;
 import com.todo.FPOS_project.enums.Citizenship;

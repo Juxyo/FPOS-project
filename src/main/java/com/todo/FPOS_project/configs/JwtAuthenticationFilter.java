@@ -1,4 +1,4 @@
-﻿package com.todo.FPOS_project.configs;
+package com.todo.FPOS_project.configs;
 
 import com.todo.FPOS_project.exceptions.UserNotFoundException;
 import com.todo.FPOS_project.services.JwtService;
@@ -22,19 +22,15 @@ import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final HandlerExceptionResolver handlerExceptionResolver;
-
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
     public JwtAuthenticationFilter(
             JwtService jwtService,
-            UserDetailsService userDetailsService,
-            HandlerExceptionResolver handlerExceptionResolver
+            UserDetailsService userDetailsService
     ) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
-        this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
     @Override

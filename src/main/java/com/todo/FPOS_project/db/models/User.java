@@ -1,4 +1,4 @@
-﻿package com.todo.FPOS_project.db.models;
+package com.todo.FPOS_project.db.models;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -21,7 +21,7 @@ import java.util.List;
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Agent.class, name = "AGENT"),
-        @JsonSubTypes.Type(value = Investor.class, name = "Investor")
+        @JsonSubTypes.Type(value = Investor.class, name = "INVESTOR")
 })
 @Document("Users")
 public class User implements UserDetails {

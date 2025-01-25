@@ -1,4 +1,4 @@
-﻿package com.todo.FPOS_project.dtos.request;
+package com.todo.FPOS_project.dtos.request;
 
 import com.todo.FPOS_project.enums.Citizenship;
 
@@ -7,14 +7,13 @@ import java.time.LocalDate;
 public class InvestorRegisterDTO {
 
     private String nationalId, lastname, firstname, emailAdress, hashedPassword, phoneNumber, address, jobTitle, employerName, employerAddress, bankName, bankAccountNumber, IBAN;
-    private boolean enabled;
     private LocalDate birthDate;
     private Citizenship citizenship;
     
     public InvestorRegisterDTO() {
     }
 
-    public InvestorRegisterDTO(String nationalId, String lastname, String firstname, String emailAdress, String hashedPassword, String phoneNumber, String address, String jobTitle, String employerName, String employerAddress, String bankName, String bankAccountNumber, String IBAN, boolean enabled, LocalDate birthDate, Citizenship citizenship) {
+    public InvestorRegisterDTO(String nationalId, String lastname, String firstname, String emailAdress, String hashedPassword, String phoneNumber, String address, String jobTitle, String employerName, String employerAddress, String bankName, String bankAccountNumber, String IBAN, LocalDate birthDate, Citizenship citizenship) {
         this.nationalId = nationalId;
         this.lastname = lastname;
         this.firstname = firstname;
@@ -28,7 +27,6 @@ public class InvestorRegisterDTO {
         this.bankName = bankName;
         this.bankAccountNumber = bankAccountNumber;
         this.IBAN = IBAN;
-        this.enabled = enabled;
         this.birthDate = birthDate;
         this.citizenship = citizenship;
     }
@@ -135,14 +133,6 @@ public class InvestorRegisterDTO {
 
     public void setIBAN(String IBAN) {
         this.IBAN = IBAN;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
     public LocalDate getBirthDate() {

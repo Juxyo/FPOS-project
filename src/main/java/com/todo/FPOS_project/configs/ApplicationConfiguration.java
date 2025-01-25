@@ -1,4 +1,4 @@
-﻿package com.todo.FPOS_project.configs;
+package com.todo.FPOS_project.configs;
 
 import com.todo.FPOS_project.db.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;

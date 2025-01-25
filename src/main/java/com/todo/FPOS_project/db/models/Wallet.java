@@ -1,4 +1,4 @@
-﻿package com.todo.FPOS_project.db.models;
+package com.todo.FPOS_project.db.models;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
