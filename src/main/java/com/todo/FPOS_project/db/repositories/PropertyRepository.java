@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Component
 @Repository
 public interface PropertyRepository extends MongoRepository<Property, String> {
@@ -15,4 +17,7 @@ public interface PropertyRepository extends MongoRepository<Property, String> {
 
     @Query(value = "{'id' :  ?0}", fields = "{ 'estimatedValue' :  1}")
     Property getEstimatedValueByPropertyId(String id);
+    
+    @Query("{ 'agentId' :  ?0 }")
+    List<Property> findByAgentId(String agentId);
 }
