@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TransactionsService {
+public class TransactionService {
     
     TransactionRepository transactionRepository;
     UserRepository userRepository;
     WalletService walletService;
     
-    public TransactionsService(TransactionRepository transactionRepository, UserRepository userRepository, WalletService walletService) {
+    public TransactionService(TransactionRepository transactionRepository, UserRepository userRepository, WalletService walletService) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
         this.walletService = walletService;

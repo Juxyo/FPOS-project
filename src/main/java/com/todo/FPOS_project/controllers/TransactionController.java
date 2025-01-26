@@ -2,7 +2,7 @@ package com.todo.FPOS_project.controllers;
 
 import com.todo.FPOS_project.db.models.Transaction;
 import com.todo.FPOS_project.dtos.request.TransactionOrderDTO;
-import com.todo.FPOS_project.services.TransactionsService;
+import com.todo.FPOS_project.services.TransactionService;
 import com.todo.FPOS_project.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +16,12 @@ import java.util.Map;
 public class TransactionController {
     
     @Autowired
-    private final TransactionsService transactionService;
+    private final TransactionService transactionService;
     
     @Autowired
     private final UserService userService;
     
-    public TransactionController(TransactionsService transactionService, UserService userService) {
+    public TransactionController(TransactionService transactionService, UserService userService) {
         this.transactionService = transactionService;
         this.userService = userService;
     }
