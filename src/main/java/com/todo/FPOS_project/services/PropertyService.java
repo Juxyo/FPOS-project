@@ -25,6 +25,10 @@ public class PropertyService {
         propertyRepository.save(property);
     }
 
+    public void deleteProperty(String id) {
+        propertyRepository.deleteById(id);
+    }
+
     public boolean PropertyExists(String id) {return propertyRepository.findByPropertyId(id) != null;}
 
     public Property getProperty(String id) {return propertyRepository.findByPropertyId(id);}
