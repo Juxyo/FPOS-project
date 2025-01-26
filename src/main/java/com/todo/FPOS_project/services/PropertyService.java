@@ -11,7 +11,7 @@ public class PropertyService {
 
     public PropertyService(PropertyRepository propertyRepository) {this.propertyRepository = propertyRepository;}
 
-    public boolean PropertyExists(String id) {return propertyRepository.findByPropertyId(id) != null;}
+    public boolean propertyExists(String id) {return propertyRepository.findByPropertyId(id) != null;}
 
     public Property getProperty(String id) {return propertyRepository.findByPropertyId(id);}
 
