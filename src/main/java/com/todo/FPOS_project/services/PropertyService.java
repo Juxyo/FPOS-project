@@ -7,6 +7,7 @@ import com.todo.FPOS_project.dtos.request.PropertyUpdateDTO;
 import com.todo.FPOS_project.enums.PropertyState;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -57,6 +58,9 @@ public class PropertyService {
                 propertyCreateDTO.getAnnualAppreciationPercent(),
                 propertyCreateDTO.getType()
         );
+        
+        property.setState(PropertyState.SAVED);
+        property.setCreationDate(LocalDate.now());
         
         return propertyRepository.save(property);
     }

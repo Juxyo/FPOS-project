@@ -33,7 +33,7 @@ public class PropertyController {
     @GetMapping("/properties")
     public ResponseEntity getProperties(@RequestParam String agentId) {
         try {
-            return ResponseEntity.ok(Map.of("property", propertyService.getPropertiesByAgentId(agentId)));
+            return ResponseEntity.ok(Map.of("properties", propertyService.getPropertiesByAgentId(agentId)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
@@ -60,6 +60,7 @@ public class PropertyController {
     @DeleteMapping()
     public ResponseEntity deleteProperty(@RequestParam String propertyId) {
         try {
+            propertyService.deleteProperty(propertyId);
             return ResponseEntity.ok("Deleted successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
