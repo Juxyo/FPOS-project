@@ -33,6 +33,7 @@ public class TransactionController {
         
         if (!userService.userIdExists(transactionOrderDTO.getInvestorId())) return ResponseEntity.badRequest().body("User does not exist.");
         if (!userService.isUserIdEnabled(transactionOrderDTO.getInvestorId())) return ResponseEntity.badRequest().body("User is disabled.");
+        if (!userService.isUserInvestor(transactionOrderDTO.getInvestorId())) return ResponseEntity.badRequest().body("User is not an investor.");
         
         Transaction transaction = transactionService.createDepositTransaction(transactionOrderDTO.getInvestorId(), transactionOrderDTO.getAmount());
         return ResponseEntity.ok(Map.of("transaction", transaction));
@@ -44,6 +45,7 @@ public class TransactionController {
         
         if (!userService.userIdExists(transactionOrderDTO.getInvestorId())) return ResponseEntity.badRequest().body("User does not exist.");
         if (!userService.isUserIdEnabled(transactionOrderDTO.getInvestorId())) return ResponseEntity.badRequest().body("User is disabled.");
+        if (!userService.isUserInvestor(transactionOrderDTO.getInvestorId())) return ResponseEntity.badRequest().body("User is not an investor.");
         
         try {
             Transaction transaction = transactionService.createWithdrawalTransaction(transactionOrderDTO.getInvestorId(), transactionOrderDTO.getAmount());
