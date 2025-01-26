@@ -38,6 +38,9 @@ public class WalletService {
     
     public void removeCurrency(String investorId, double amount) {
         Wallet wallet = walletRepository.findByInvestorId(investorId);
+        
+        if (wallet.getBalance() < amount) throw new IllegalArgumentException("Insufficient funds");
+        
         wallet.setBalance(wallet.getBalance() - amount);
         walletRepository.save(wallet);
     }
