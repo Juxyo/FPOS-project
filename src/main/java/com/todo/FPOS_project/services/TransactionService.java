@@ -6,6 +6,7 @@ import com.todo.FPOS_project.db.repositories.UserRepository;
 import com.todo.FPOS_project.enums.TransactionType;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -40,6 +41,7 @@ public class TransactionService {
         transaction.setInvestorId(investorId);
         transaction.setAmount(amount);
         transaction.setType(TransactionType.DEPOSIT);
+        transaction.setDate(LocalDate.now());
         
         transaction = transactionRepository.save(transaction);
         walletService.processTransaction(investorId, amount, TransactionType.DEPOSIT);
@@ -53,6 +55,7 @@ public class TransactionService {
         transaction.setInvestorId(investorId);
         transaction.setAmount(amount);
         transaction.setType(TransactionType.WITHDRAWAL);
+        transaction.setDate(LocalDate.now());
         
         transaction = transactionRepository.save(transaction);
         walletService.processTransaction(investorId, amount, TransactionType.WITHDRAWAL);

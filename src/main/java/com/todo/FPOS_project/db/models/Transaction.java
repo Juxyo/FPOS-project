@@ -4,6 +4,8 @@ import com.todo.FPOS_project.enums.TransactionType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+
 @Document("Transactions")
 public class Transaction {
     
@@ -11,6 +13,7 @@ public class Transaction {
     private String id;
     private String investorId, propertyId;
     private double amount;
+    private LocalDate date;
     private TransactionType type;
 
     public Transaction() {
@@ -21,6 +24,7 @@ public class Transaction {
         this.propertyId = propertyId;
         this.amount = amount;
         this.type = type;
+        this.date = LocalDate.now();
     }
 
     public Transaction(String id, String investorId, String propertyId, double amount, TransactionType type) {
@@ -29,6 +33,7 @@ public class Transaction {
         this.propertyId = propertyId;
         this.amount = amount;
         this.type = type;
+        this.date = LocalDate.now();
     }
 
     public String getId() {
@@ -69,5 +74,13 @@ public class Transaction {
 
     public void setType(TransactionType type) {
         this.type = type;
+    }
+    
+    public LocalDate getDate() {
+        return date;
+    }
+    
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }

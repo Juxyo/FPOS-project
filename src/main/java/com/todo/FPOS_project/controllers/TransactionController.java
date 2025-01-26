@@ -2,6 +2,7 @@ package com.todo.FPOS_project.controllers;
 
 import com.todo.FPOS_project.db.models.Transaction;
 import com.todo.FPOS_project.dtos.request.TransactionOrderDTO;
+import com.todo.FPOS_project.services.PropertyService;
 import com.todo.FPOS_project.services.TransactionService;
 import com.todo.FPOS_project.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
