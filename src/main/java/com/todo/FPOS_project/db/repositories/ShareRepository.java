@@ -1,4 +1,4 @@
-﻿package com.todo.FPOS_project.db.repositories;
+package com.todo.FPOS_project.db.repositories;
 
 import com.todo.FPOS_project.db.models.Share;
 import org.springframework.data.mongodb.repository.MongoRepository;
