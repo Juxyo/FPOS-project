@@ -9,16 +9,23 @@ public class Transaction {
     
     @Id
     private String id;
-    private String userId, propertyId;
+    private String investorId, propertyId;
     private double amount;
     private TransactionType type;
 
     public Transaction() {
     }
 
-    public Transaction(String id, String userId, String propertyId, double amount, TransactionType type) {
+    public Transaction(String investorId, String propertyId, double amount, TransactionType type) {
+        this.investorId = investorId;
+        this.propertyId = propertyId;
+        this.amount = amount;
+        this.type = type;
+    }
+
+    public Transaction(String id, String investorId, String propertyId, double amount, TransactionType type) {
         this.id = id;
-        this.userId = userId;
+        this.investorId = investorId;
         this.propertyId = propertyId;
         this.amount = amount;
         this.type = type;
@@ -32,12 +39,12 @@ public class Transaction {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getInvestorId() {
+        return investorId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setInvestorId(String investorId) {
+        this.investorId = investorId;
     }
 
     public String getPropertyId() {
