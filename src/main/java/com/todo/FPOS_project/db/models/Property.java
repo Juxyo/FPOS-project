@@ -19,7 +19,17 @@ public class Property {
     
     public Property() {
     }
-    
+
+    public Property(String name, String agentId, String address, double estimatedValue, double annualRentIncomePercent, double annualAppreciationPercent, PropertyType type) {
+        this.name = name;
+        this.agentId = agentId;
+        this.address = address;
+        this.estimatedValue = estimatedValue;
+        this.annualRentIncomePercent = annualRentIncomePercent;
+        this.annualAppreciationPercent = annualAppreciationPercent;
+        this.type = type;
+    }
+
     public Property(String name, String agentId, String address, double estimatedValue, double annualRentIncomePercent, double annualAppreciationPercent, LocalDate creationDate, LocalDate lastFoundingStartDate, PropertyState state, PropertyType type) {
         this.name = name;
         this.agentId = agentId;
