@@ -15,9 +15,9 @@ public interface PropertyRepository extends MongoRepository<Property, String> {
     @Query("{ 'id' :  ?0 }")
     Property findByPropertyId(String id);
 
-    @Query(value = "{'id' :  ?0}", fields = "{ 'estimatedValue' :  1}")
-    Property getEstimatedValueByPropertyId(String id);
-    
     @Query("{ 'agentId' :  ?0 }")
     List<Property> findByAgentId(String agentId);
+    
+    @Query("{ 'status' :  ?0 }")
+    List<Property> findByStatus(String status);
 }

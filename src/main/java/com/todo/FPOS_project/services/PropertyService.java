@@ -32,16 +32,20 @@ public class PropertyService {
         return property;
     }
     
+    public List<Property> getProperties() {
+        return propertyRepository.findAll();
+    }
+    
+    public List<Property> getPropertiesByState(PropertyState state) {
+        return propertyRepository.findByStatus(state.name());
+    }
+    
     public List<Property> getPropertiesByAgentId(String agentId) {
         if (!userService.userIdExists(agentId)) throw new IllegalArgumentException("Agent does not exist.");
         if (!userService.isUserIdEnabled(agentId)) throw new IllegalArgumentException("Agent is disabled.");
         if (userService.isUserInvestor(agentId)) throw new IllegalArgumentException("Agent is an investor.");
         
         return propertyRepository.findByAgentId(agentId);
-    }
-
-    public double getEstimatedValueByPropertyId(String id) {
-        return propertyRepository.getEstimatedValueByPropertyId(id).getEstimatedValue();
     }
     
     public Property createProperty(PropertyCreateDTO propertyCreateDTO) {
@@ -65,18 +69,18 @@ public class PropertyService {
         return propertyRepository.save(property);
     }
     
-    public Property updateProperty(PropertyUpdateDTO propertyUpdateDTO) {
+    public Property updateProperty(String propertyId, PropertyUpdateDTO propertyUpdateDTO) {
         if (!propertyUpdateDTO.getAgentId().isPresent()) throw new IllegalArgumentException("Agent ID is required.");
         
         if (!userService.userIdExists(propertyUpdateDTO.getAgentId().get())) throw new IllegalArgumentException("Agent does not exist.");
         if (!userService.isUserIdEnabled(propertyUpdateDTO.getAgentId().get())) throw new IllegalArgumentException("Agent is disabled.");
         if (userService.isUserInvestor(propertyUpdateDTO.getAgentId().get())) throw new IllegalArgumentException("Agent is an investor.");
         
-        if (!propertyExists(propertyUpdateDTO.getId())) throw new IllegalArgumentException("Property does not exist.");
+        if (!propertyExists(propertyId)) throw new IllegalArgumentException("Property does not exist.");
 
-        Property property = propertyRepository.findByPropertyId(propertyUpdateDTO.getId());
+        Property property = propertyRepository.findByPropertyId(propertyId);
         
-        if (property.getState() != PropertyState.CLOSED)
+        if (property.getState() != PropertyState.SAVED) throw new IllegalArgumentException("Property is not in a state that can be updated.");
         
         property.setName(propertyUpdateDTO.getName().isPresent() ? propertyUpdateDTO.getName().get() : property.getName());
         property.setAgentId(propertyUpdateDTO.getAgentId().get());
@@ -92,6 +96,20 @@ public class PropertyService {
     public void deleteProperty(String id) {
         if (!propertyExists(id)) throw new IllegalArgumentException("Property does not exist.");
         
+        if (getProperty(id).getState() != PropertyState.SAVED) throw new IllegalArgumentException("Property is not in a state that can be deleted.");
+        
         propertyRepository.deleteById(id);
+    }
+    
+    public Property openProperty(String id, String agentId) {
+        if (!propertyExists(id)) throw new IllegalArgumentException("Property does not exist.");
+        
+        Property property = getProperty(id);
+        
+        if (property.getState() != PropertyState.SAVED && property.getState() != PropertyState.CLOSED) throw new IllegalArgumentException("Property is not in a state that can be opened.");
+        
+        property.setState(PropertyState.OPENED);
+        
+        return propertyRepository.save(property);
     }
 }

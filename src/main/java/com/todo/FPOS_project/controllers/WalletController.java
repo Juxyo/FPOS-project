@@ -24,8 +24,8 @@ public class WalletController {
         this.userService = userService;
     }
     
-    @GetMapping("/balance")
-    public ResponseEntity getBalance(@RequestParam String investorId) {
+    @GetMapping("/{investorId}/balance")
+    public ResponseEntity getBalance(@PathVariable String investorId) {
         if (investorId == null) return ResponseEntity.badRequest().body(Map.of("message", "Id is required."));
 
         if (!userService.userIdExists(investorId)) return ResponseEntity.badRequest().body(Map.of("message", "User does not exist."));

@@ -7,7 +7,6 @@ import java.util.OptionalDouble;
 
 public class PropertyUpdateDTO {
 
-    private String id;
     private Optional<String> name, agentId, address;
     private OptionalDouble estimatedValue, annualRentIncomePercent, annualAppreciationPercent;
     private Optional<PropertyType> type;
@@ -15,8 +14,7 @@ public class PropertyUpdateDTO {
     public PropertyUpdateDTO() {
     }
 
-    public PropertyUpdateDTO(String id, Optional<String> name, Optional<String> agentId, Optional<String> address, OptionalDouble estimatedValue, OptionalDouble annualRentIncomePercent, OptionalDouble annualAppreciationPercent, Optional<PropertyType> type) {
-        this.id = id;
+    public PropertyUpdateDTO(Optional<String> name, Optional<String> agentId, Optional<String> address, OptionalDouble estimatedValue, OptionalDouble annualRentIncomePercent, OptionalDouble annualAppreciationPercent, Optional<PropertyType> type) {
         this.name = name;
         this.agentId = agentId;
         this.address = address;
@@ -24,14 +22,6 @@ public class PropertyUpdateDTO {
         this.annualRentIncomePercent = annualRentIncomePercent;
         this.annualAppreciationPercent = annualAppreciationPercent;
         this.type = type;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public Optional<String> getName() {
