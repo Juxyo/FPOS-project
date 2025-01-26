@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@RequestMapping("/auth")
+@RequestMapping("/property")
 @CrossOrigin(origins = "*")
 @RestController
 public class PropertyController {
