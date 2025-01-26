@@ -1,5 +1,6 @@
 package com.todo.FPOS_project.services;
 
+import com.todo.FPOS_project.db.models.submodels.Investor;
 import com.todo.FPOS_project.db.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +27,9 @@ public class UserService {
     
     public boolean isUserEmailEnabled(String emailAdress) {
         return userRepository.findByEmailAdress(emailAdress).isEnabled();
+    }
+    
+    public boolean isUserInvestor(String nationalId) {
+        return userRepository.findByNationalId(nationalId) instanceof Investor;
     }
 }

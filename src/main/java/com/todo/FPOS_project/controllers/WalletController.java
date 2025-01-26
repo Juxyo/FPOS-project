@@ -30,6 +30,7 @@ public class WalletController {
 
         if (!userService.userIdExists(investorId)) return ResponseEntity.badRequest().body(Map.of("message", "User does not exist."));
         if (!userService.isUserIdEnabled(investorId)) return ResponseEntity.badRequest().body(Map.of("message", "User is disabled."));
+        if (!userService.isUserInvestor(investorId)) return ResponseEntity.badRequest().body(Map.of("message", "User is not an investor."));
         
         if (!walletService.walletExists(investorId)) walletService.createWallet(investorId);
         
