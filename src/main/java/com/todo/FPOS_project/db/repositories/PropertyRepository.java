@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 public interface PropertyRepository extends MongoRepository<Property, String> {
 
     @Query("{ 'id' :  ?0 }")
-    Property findByRepositoryId(String id);
+    Property findByPropertyId(String id);
 
     @Query(value = "{'id' :  ?0}", fields = "{ 'estimatedValue' :  1}")
-    double getEstimatedValueByRepositoryId(String id);
+    Property getEstimatedValueByPropertyId(String id);
 }
