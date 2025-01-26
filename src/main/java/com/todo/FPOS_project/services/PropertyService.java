@@ -11,9 +11,17 @@ public class PropertyService {
 
     public PropertyService(PropertyRepository propertyRepository) {this.propertyRepository = propertyRepository;}
 
-    public boolean propertyExists(String id) {return propertyRepository.findByPropertyId(id) != null;}
+    public boolean propertyExists(String id) {
+        return propertyRepository.findByPropertyId(id) != null;
+    }
 
-    public Property getProperty(String id) {return propertyRepository.findByPropertyId(id);}
+    public Property getProperty(String id) {
+        return propertyRepository.findByPropertyId(id);
+    }
 
-    public double getEstimatedValueByPropertyId(String id) {return propertyRepository.getEstimatedValueByPropertyId(id).getEstimatedValue();}
+    public double getEstimatedValueByPropertyId(String id) {
+        return propertyRepository.getEstimatedValueByPropertyId(id).getEstimatedValue();
+    }
+    
+    
 }
