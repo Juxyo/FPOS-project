@@ -20,4 +20,10 @@ public interface TransactionRepository extends MongoRepository<Transaction, Stri
     
     @Query("{'investorId' : ?0, 'propertyId' : ?1}")
     List<Transaction> findTransactions(String investorId, String propertyId);
+    
+    @Query("{ 'investorId' : ?0, 'type' : ?1 }")
+    List<Transaction> findTransactionsByInvestorIdAndType(String investorId, String type);
+    
+    @Query("{ 'investorId' : ?0, 'type' : 'BUY', 'date' : { $gt : ?1 } }")
+    List<Transaction> findBuyTransactionsByInvestorIdLastYear(String investorId, String date);
 }
