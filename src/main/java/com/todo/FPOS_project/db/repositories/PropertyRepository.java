@@ -18,6 +18,9 @@ public interface PropertyRepository extends MongoRepository<Property, String> {
     @Query("{ 'agentId' :  ?0 }")
     List<Property> findByAgentId(String agentId);
     
-    @Query("{ 'status' :  ?0 }")
-    List<Property> findByStatus(String status);
+    @Query("{ 'state' :  ?0 }")
+    List<Property> findByState(String state);
+    
+    @Query("{ 'state' :  ?0, 'agentId' :  ?1 }")
+    List<Property> findByStateAndAgentId(String state, String agentId);
 }
