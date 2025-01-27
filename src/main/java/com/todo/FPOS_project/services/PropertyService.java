@@ -1,13 +1,18 @@
 package com.todo.FPOS_project.services;
 
 import com.todo.FPOS_project.db.models.Property;
+import com.todo.FPOS_project.db.models.Share;
 import com.todo.FPOS_project.db.repositories.PropertyRepository;
+import com.todo.FPOS_project.db.repositories.ShareRepository;
+import com.todo.FPOS_project.dtos.request.BuyShareDTO;
 import com.todo.FPOS_project.dtos.request.PropertyCreateDTO;
 import com.todo.FPOS_project.dtos.request.PropertyUpdateDTO;
+import com.todo.FPOS_project.dtos.response.CatalogueResponseDTO;
 import com.todo.FPOS_project.enums.PropertyState;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,10 +20,18 @@ public class PropertyService {
 
     private final PropertyRepository propertyRepository;
     private final UserService userService;
+    private final ShareService shareService;
+    private final TransactionService transactionService;
+    private final ShareRepository shareRepository;
+    
+    private List<String> lockedForPurchase = new ArrayList<>();
 
-    public PropertyService(PropertyRepository propertyRepository, UserService userService) {
+    public PropertyService(PropertyRepository propertyRepository, UserService userService, ShareService shareService, TransactionService transactionService, ShareRepository shareRepository) {
         this.propertyRepository = propertyRepository;
         this.userService = userService;
+        this.shareService = shareService;
+        this.transactionService = transactionService;
+        this.shareRepository = shareRepository;
     }
 
     public boolean propertyExists(String id) {
@@ -37,7 +50,28 @@ public class PropertyService {
     }
     
     public List<Property> getPropertiesByState(PropertyState state) {
-        return propertyRepository.findByStatus(state.name());
+        return propertyRepository.findByState(state.name());
+    }
+    
+    public double getTotalShareBought(String propertyId) {
+        double totalShare = 0;
+
+        for (Share share : shareRepository.findByPropertyId(propertyId)) {
+            totalShare += share.getSharePercent();
+        }
+        
+        return totalShare;
+    }
+    
+    public List<CatalogueResponseDTO> getCatalogue() {
+        List<Property> properties = propertyRepository.findByState(PropertyState.OPENED.name());
+        List<CatalogueResponseDTO> catalogue = new ArrayList<>();
+        
+        for (Property property : properties) {
+            catalogue.add(new CatalogueResponseDTO(property, property.getEstimatedValue() * (100/(100-getTotalShareBought(property.getId())))));
+        }
+        
+        return catalogue;
     }
     
     public List<Property> getPropertiesByAgentId(String agentId) {
@@ -101,15 +135,56 @@ public class PropertyService {
         propertyRepository.deleteById(id);
     }
     
-    public Property openProperty(String id, String agentId) {
+    public Property openProperty(String id) {
         if (!propertyExists(id)) throw new IllegalArgumentException("Property does not exist.");
         
         Property property = getProperty(id);
         
+        if (propertyRepository.findByStateAndAgentId(PropertyState.OPENED.name(), property.getAgentId()).size() >= 6) throw new IllegalArgumentException("Agent has reached the maximum number of opened properties.");
+        
         if (property.getState() != PropertyState.SAVED && property.getState() != PropertyState.CLOSED) throw new IllegalArgumentException("Property is not in a state that can be opened.");
         
         property.setState(PropertyState.OPENED);
+        property.setLastFoundingStartDate(LocalDate.now());
         
         return propertyRepository.save(property);
+    }
+    
+    public Share buyShare(String propertyId, BuyShareDTO buyShareDTO) {
+        if (!userService.userIdExists(buyShareDTO.getInvestorId())) throw new IllegalArgumentException("Investor does not exist.");
+        if (!userService.isUserIdEnabled(buyShareDTO.getInvestorId())) throw new IllegalArgumentException("Investor is disabled.");
+        if (!userService.isUserInvestor(buyShareDTO.getInvestorId())) throw new IllegalArgumentException("Investor is an agent.");
+        
+        if (!propertyExists(propertyId)) throw new IllegalArgumentException("Property does not exist.");
+        Property property = getProperty(propertyId);
+        if (property.getState() != PropertyState.OPENED) throw new IllegalArgumentException("Property is not in a state that can be bought.");
+        
+        if (buyShareDTO.getAmount() < 500) throw new IllegalArgumentException("Amount must be greater than 500EUR.");
+        if (transactionService.getTotalBuyAmountLastYear(buyShareDTO.getInvestorId()) + buyShareDTO.getAmount() > 100000) throw new IllegalArgumentException("Investor has reached the maximum amount of 10000EUR for a year.");
+        if (property.getEstimatedValue() * (100/(100-getTotalShareBought(property.getId()))) < buyShareDTO.getAmount()) throw new IllegalArgumentException("Amount is greater than the remaining value of the property.");
+        
+        
+        if (lockedForPurchase.contains(propertyId)) {
+            try {
+                Thread.sleep(500);
+                return buyShare(propertyId, buyShareDTO);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            lockedForPurchase.add(propertyId);
+        }
+        
+        transactionService.createBuyTransaction(buyShareDTO.getInvestorId(), propertyId, buyShareDTO.getAmount());
+        
+        if (shareService.shareExists(propertyId, buyShareDTO.getInvestorId())) {
+            Share share = shareService.updateShare(buyShareDTO.getInvestorId(), propertyId, shareService.getShare(buyShareDTO.getInvestorId(), propertyId).getSharePercent() + buyShareDTO.getAmount()/property.getEstimatedValue());
+            lockedForPurchase.remove(propertyId);
+            return share;
+        }
+        
+        Share share = shareService.createShare(buyShareDTO.getInvestorId(), propertyId, buyShareDTO.getAmount()/property.getEstimatedValue());
+        lockedForPurchase.remove(propertyId);
+        return share;
     }
 }
