@@ -51,8 +51,8 @@ public class ShareController {
         }
     }
     
-    @GetMapping("/shares")
-    public ResponseEntity getShares(@RequestParam String investorId) {
+    @GetMapping("/shares/{investorId}")
+    public ResponseEntity getShares(@PathVariable String investorId) {
         if (!userService.userIdExists(investorId)) return ResponseEntity.badRequest().body("Investor does not exist");
         if (!userService.isUserIdEnabled(investorId)) return ResponseEntity.badRequest().body("Investor is not enabled");
         if (!userService.isUserInvestor(investorId)) return ResponseEntity.badRequest().body("User is not an investor");
