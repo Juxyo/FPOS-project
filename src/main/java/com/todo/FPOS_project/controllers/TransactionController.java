@@ -55,4 +55,17 @@ public class TransactionController {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
+    
+    @GetMapping("/{investorId}")
+    public ResponseEntity getTransactions(@PathVariable String investorId) {
+        if (!userService.userIdExists(investorId)) return ResponseEntity.badRequest().body("User does not exist.");
+        if (!userService.isUserIdEnabled(investorId)) return ResponseEntity.badRequest().body("User is disabled.");
+        if (!userService.isUserInvestor(investorId)) return ResponseEntity.badRequest().body("User is not an investor.");
+        
+        try {
+            return ResponseEntity.ok(Map.of("transactions", transactionService.getTransactionsByInvestorId(investorId)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
 }
