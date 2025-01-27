@@ -32,6 +32,7 @@ public class WalletService {
     
     public void addCurrency(String investorId, double amount) {
         Wallet wallet = walletRepository.findByInvestorId(investorId);
+        
         wallet.setBalance(wallet.getBalance() + amount);
         walletRepository.save(wallet);
     }
@@ -46,6 +47,8 @@ public class WalletService {
     }
     
     public void processTransaction(String investorId, double amount, TransactionType transactionType) {
+        if (!walletExists(investorId)) createWallet(investorId);
+        
         switch (transactionType) {
             case DEPOSIT:
             case SELL:
