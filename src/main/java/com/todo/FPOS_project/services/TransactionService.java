@@ -64,9 +64,10 @@ public class TransactionService {
     
     public Transaction createBuyTransaction(String investorId, String propertyId, double amount) {
         Transaction transaction = new Transaction(investorId, propertyId, amount, TransactionType.BUY);
-        transaction = transactionRepository.save(transaction);
         
         walletService.processTransaction(investorId, amount, TransactionType.BUY);
+        transaction = transactionRepository.save(transaction);
+        
         return transaction;
     }
     
@@ -85,4 +86,11 @@ public class TransactionService {
         walletService.processTransaction(investorId, amount, TransactionType.RENT_INCOME);
         return transaction;
     }
+    
+    public double getTotalBuyAmountLastYear(String investorId) {
+        List<Transaction> transactions = transactionRepository.findBuyTransactionsByInvestorIdLastYear(investorId, LocalDate.now().minusYears(1).toString());
+        return transactions.stream().mapToDouble(Transaction::getAmount).sum();
+    }
+    
+    
 }
