@@ -1,6 +1,9 @@
 package com.todo.FPOS_project.controllers;
 
+import com.todo.FPOS_project.db.models.Property;
+import com.todo.FPOS_project.dtos.request.BuyShareDTO;
 import com.todo.FPOS_project.dtos.request.PropertyCreateDTO;
+import com.todo.FPOS_project.dtos.request.PropertyStateDTO;
 import com.todo.FPOS_project.dtos.request.PropertyUpdateDTO;
 import com.todo.FPOS_project.enums.PropertyState;
 import com.todo.FPOS_project.services.PropertyService;
@@ -53,7 +56,7 @@ public class PropertyController {
     @GetMapping("/opened")
     public ResponseEntity getOpenedProperties() {
         try {
-            return ResponseEntity.ok(Map.of("properties", propertyService.getPropertiesByState(PropertyState.OPENED)));
+            return ResponseEntity.ok(Map.of("properties", propertyService.getCatalogue()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
@@ -82,6 +85,31 @@ public class PropertyController {
         try {
             propertyService.deleteProperty(propertyId);
             return ResponseEntity.ok("Deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+    
+    @PutMapping("/{propertyId}/state")
+    public ResponseEntity changePropertyState(@PathVariable("propertyId") String propertyId, @RequestBody PropertyStateDTO state) {
+        try {
+            switch (state.getState()) {
+                case "OPENED":
+                    // Agent owning the property
+                    Property property = propertyService.openProperty(propertyId);
+                    return ResponseEntity.ok(Map.of("message", "Property opened", "property", property));
+                default:
+                    return ResponseEntity.badRequest().body(Map.of("message", "Invalid state"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+    
+    @PostMapping("/{propertyId}/buy")
+    public ResponseEntity buyProperty(@PathVariable("propertyId") String propertyId, @RequestBody BuyShareDTO buyShareDTO) {
+        try {
+            return ResponseEntity.ok(Map.of("message", "Property bought", "share", propertyService.buyShare(propertyId, buyShareDTO)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
