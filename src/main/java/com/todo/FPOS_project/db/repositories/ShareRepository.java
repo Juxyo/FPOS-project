@@ -17,4 +17,7 @@ public interface ShareRepository extends MongoRepository<Share, String> {
     
     @Query("{investorId: '?0'}")
     List<Share> findByInvestorId(String investorId);
+    
+    @Query("{propertyId: '?0'}")
+    List<Share> findByPropertyId(String propertyId);
 }
