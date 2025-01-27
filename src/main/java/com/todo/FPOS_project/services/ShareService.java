@@ -9,14 +9,9 @@ import java.util.List;
 @Service
 public class ShareService {
     
-    private UserService userService;
-    private PropertyService propertyService;
-    
     private ShareRepository shareRepository;
     
-    public ShareService(UserService userService, PropertyService propertyService, ShareRepository shareRepository) {
-        this.userService = userService;
-        this.propertyService = propertyService;
+    public ShareService(ShareRepository shareRepository) {
         this.shareRepository = shareRepository;
     }
     
@@ -24,7 +19,7 @@ public class ShareService {
         return shareRepository.findByInvestorAndProperty(investorId, propertyId) != null;
     }
     
-    public void createShare(String investorId, String propertyId, double sharePercent) {
+    public Share createShare(String investorId, String propertyId, double sharePercent) {
         if (shareExists(investorId, propertyId)) throw new IllegalArgumentException("Share already exists");
         
         Share share = new Share();
@@ -32,16 +27,16 @@ public class ShareService {
         share.setPropertyId(propertyId);
         share.setSharePercent(sharePercent);
         
-        shareRepository.save(share);
+        return shareRepository.save(share);
     }
     
-    public void updateShare(String investorId, String propertyId, double sharePercent) {
+    public Share updateShare(String investorId, String propertyId, double sharePercent) {
         Share share = shareRepository.findByInvestorAndProperty(investorId, propertyId);
         if (share == null) throw new IllegalArgumentException("Share does not exist");
         
         share.setSharePercent(sharePercent);
         
-        shareRepository.save(share);
+        return shareRepository.save(share);
     }
     
     public void deleteShare(String investorId, String propertyId) {
